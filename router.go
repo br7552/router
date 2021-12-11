@@ -57,14 +57,14 @@ func (rt *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	rt.NotFound(w, r)
 }
 
-func (rt *Router) HandlerFunc(method string, pattern string,
+func (rt *Router) HandleFunc(method string, pattern string,
 	handler func(http.ResponseWriter, *http.Request)) {
 	route := newRoute(method, pattern, http.HandlerFunc(handler))
 
 	rt.routes = append(rt.routes, route)
 }
 
-func (rt *Router) Handler(method string, pattern string,
+func (rt *Router) Handle(method string, pattern string,
 	handler http.Handler) {
 	route := newRoute(method, pattern, handler)
 
