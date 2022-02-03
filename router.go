@@ -105,6 +105,11 @@ type contextKey string
 
 const paramsContextKey = contextKey("params")
 
+func Param(r *http.Request, key string) string {
+	m := Params(r.Context())
+	return m[key]
+}
+
 func Params(ctx context.Context) map[string]string {
 	params, ok := ctx.Value(paramsContextKey).(map[string]string)
 	if !ok {
