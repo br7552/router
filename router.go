@@ -30,7 +30,9 @@ func (rt *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		if r.Method != http.MethodOptions && r.Method != route.method {
+		if r.Method != http.MethodOptions && route.method != "" &&
+			r.Method != route.method {
+
 			allow = append(allow, route.method)
 			continue
 		}
@@ -64,9 +66,23 @@ func (rt *Router) HandleFunc(method string, pattern string,
 	rt.routes = append(rt.routes, route)
 }
 
+func (rt *Router) HandleAllFunc(pattern string,
+	handler func(http.ResponseWriter, *http.Request)) {
+	route := newRoute("", pattern, http.HandlerFunc(handler))
+
+	rt.routes = append(rt.routes, route)
+}
+
 func (rt *Router) Handle(method string, pattern string,
 	handler http.Handler) {
 	route := newRoute(method, pattern, handler)
+
+	rt.routes = append(rt.routes, route)
+}
+
+func (rt *Router) HandleAll(pattern string,
+	handler http.Handler) {
+	route := newRoute("", pattern, handler)
 
 	rt.routes = append(rt.routes, route)
 }
